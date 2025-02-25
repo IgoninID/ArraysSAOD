@@ -5,7 +5,9 @@ using namespace std;
 
 int main()
 {
-    testes();
+    tests_for_sort();
+    tests_for_search();
+    tests_for_bynsearch();
     int* arr = CreateArrInc<int>(100000000, 0, 10000);
     //for (int i = 0; i < 100; i++)
     //{
@@ -14,9 +16,9 @@ int main()
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<> distr(0, 100000000-1);
-    int find_val = arr[distr(gen)];
-    cout << FindElem<int>(arr, 100000000, find_val) << "\n";
-    cout << FindElemDub<int>(arr, 100000000, find_val);
+    //int find_val = arr[distr(gen)];
+    //cout << FindElem<int>(arr, 100000000, find_val) << "\n";
+    //cout << FindElemDub<int>(arr, 100000000, find_val);
     //TotalTime<int>(arr, 100000000, 0, 100000000 - 1);
     string s = "arr1.txt";
     //SavetoF<int>(arr, 100000000, s);
