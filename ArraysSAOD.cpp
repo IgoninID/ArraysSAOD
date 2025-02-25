@@ -10,7 +10,13 @@ int main()
     //{
     //    cout << arr[i] << "\n";
     //}
-    TotalTime<int>(arr, 100000000, 0, 100000000 - 1);
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distr(0, 100000000-1);
+    int find_val = arr[distr(gen)];
+    cout << FindElem<int>(arr, 100000000, find_val) << "\n";
+    cout << FindElemDub<int>(arr, 100000000, find_val);
+    //TotalTime<int>(arr, 100000000, 0, 100000000 - 1);
     string s = "arr1.txt";
     //SavetoF<int>(arr, 100000000, s);
 

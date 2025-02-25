@@ -51,20 +51,58 @@ TypeData* CreateArr(size_t n, TypeData start, TypeData end)
 /// <summary>
 /// Вычисление времени затраченного на выполнение функции
 /// </summary>
-/// <typeparam name="TypeData - тип"></typeparam>
-/// <param name="testFunc - выполняемая функция"></param>
+/// <typeparam name="TypeData - тип элементов массива"></typeparam>
+/// <param name="arr - массив"></param>
+/// <param name="n - размер массива"></param>
+/// <param name="val - искомый элемент"></param>
+/// <param name="testFunc - тестируемая функция"></param>
 /// <returns>
 /// количество милисекунд затраченное на выполнение функции
 /// </returns>
 template <typename TypeData>
-int TimeFunc(TypeData testFunc)
+int TimeFunc(TypeData* arr, size_t n, TypeData val, function<size_t(TypeData*, size_t, TypeData)> testFunc)
 {
 	auto t1 = steady_clock::now();
-	testFunc();
+	size_t i = testFunc(arr, n, val);
 	auto t2 = steady_clock::now();
 	auto delta = duration_cast<milliseconds>(t2 - t1);
 	cout << delta.count() << "\n";
 	return delta.count();
+}
+
+/// <summary>
+/// Бинарный поиск элемента в массиве
+/// </summary>
+/// <typeparam name="TypeData - тип элементов массива"></typeparam>
+/// <param name="arr - массив"></param>
+/// <param name="n - размер массива"></param>
+/// <param name="find_val - искомый элемент"></param>
+/// <returns>
+/// место элемента в массиве(индекс + 1), если нет, то вернет 0
+/// </returns>
+template <typename TypeData>
+size_t FindElemDub(TypeData* arr, size_t n, TypeData find_val)
+{
+	size_t left = 0;
+	size_t right = n;
+	size_t mid;
+	while (left < right)
+	{
+		mid = (left + right) / 2;
+		if (arr[mid] == find_val)
+		{
+			return mid+1;
+		}
+		if (arr[mid] > find_val)
+		{
+			right--;
+		}
+		else
+		{
+			left++;
+		}
+	}
+	return 0;
 }
 
 /// <summary>
@@ -75,16 +113,16 @@ int TimeFunc(TypeData testFunc)
 /// <param name="n - размер массива"></param>
 /// <param name="elem - искомый элемент"></param>
 /// <returns>
-/// нашел ли элемент в массиве
+/// место элемента в массиве(индекс + 1), если нет, то вернет 0
 /// </returns>
 template <typename TypeData>
-bool FindElem(TypeData* arr,size_t n,TypeData elem)
+size_t FindElem(TypeData* arr,size_t n,TypeData elem)
 {
 	for (size_t i = 0; i < n; i++)
 	{
 		if (elem == arr[i])
 		{
-			return 1;
+			return i+1;
 		}
 	}
 	return 0;
@@ -168,7 +206,7 @@ void TotalTime(TypeData* arr, size_t n, int start, int end)
 	for (int i = 0; i < 100;i++)
 	{
 		TypeData find_val = arr[distr(gen)];
-		times += TimeFunc([&]() {bool ind = FindElem<TypeData>(arr, n, find_val);});
+		times += TimeFunc<TypeData>(arr, n, find_val, FindElem<TypeData>);
 	}
 	cout << times/100.0;
 }
