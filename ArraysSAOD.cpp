@@ -5,6 +5,7 @@ using namespace std;
 
 int main()
 {
+    testes();
     int* arr = CreateArrInc<int>(100000000, 0, 10000);
     //for (int i = 0; i < 100; i++)
     //{
@@ -19,5 +20,6 @@ int main()
     //TotalTime<int>(arr, 100000000, 0, 100000000 - 1);
     string s = "arr1.txt";
     //SavetoF<int>(arr, 100000000, s);
+    delete[] arr;
 
 }

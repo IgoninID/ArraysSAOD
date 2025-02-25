@@ -5,7 +5,6 @@
 #include <chrono> //
 #include <functional> //
 #include <string> //
-#include <cassert>
 
 using namespace std;
 using namespace chrono;
@@ -86,7 +85,7 @@ size_t FindElemDub(TypeData* arr, size_t n, TypeData find_val)
 	size_t left = 0;
 	size_t right = n;
 	size_t mid;
-	while (left < right)
+	while (left <= right)
 	{
 		mid = (left + right) / 2;
 		if (arr[mid] == find_val)
@@ -174,7 +173,9 @@ TypeData* CreateArrInc(size_t n, TypeData start, TypeData end)
 /// <typeparam name="TypeData - тип элементов массива"></typeparam>
 /// <param name="arr - массив"></param>
 /// <param name="n - размер массива"></param>
-/// <returns></returns>
+/// <returns>
+/// 1 - если массив отсортирован, 0 - если нет
+/// </returns>
 template <typename TypeData>
 bool FindSort(TypeData* arr, size_t n)
 {
@@ -218,8 +219,11 @@ void TotalTime(TypeData* arr, size_t n, int start, int end)
 /// <param name="arr - массив"></param>
 /// <param name="n - размер массива"></param>
 /// <param name="fname - имя файла"></param>
+/// <returns>
+/// 1 - файл не открылся, 0 - функция выполнила свою работу
+/// </returns>
 template <typename TypeData>
-void SavetoF(TypeData* arr, size_t n, string fname)
+int SavetoF(TypeData* arr, size_t n, string fname)
 {
 	ofstream Savef;
 	Savef.open(fname);
@@ -230,11 +234,14 @@ void SavetoF(TypeData* arr, size_t n, string fname)
 			Savef << arr[i] << " , ";
 		}
 	}
+	else
+	{
+		return 1;
+	}
 	Savef.close();
+	return 0;
 }
 
-//todo тесты
-
-
+void testes();
 
 
