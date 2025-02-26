@@ -85,22 +85,22 @@ size_t FindElemDub(TypeData* arr, size_t n, TypeData find_val)
 	size_t left = 0; // левая граница массива
 	size_t right = n; // правая граница массива
 	size_t mid; // середина 
-	while (left <= right)
+	while (left < right)
 	{
-		mid = (left + right) / 2; // находим середину массива
-		if (arr[mid] == find_val)
+		mid = (left + right) / 2; // находим серединный индекс массива
+		if (arr[mid] > find_val) // проверка какую часть отбрасываем из поиска
 		{
-			return mid+1; // если элемент найден, то возвращаем индекс + 1
-		}
-		if (arr[mid] > find_val)
-		{
-			right--; // ищем левее
+			right = mid;
 		}
 		else
 		{
-			left++; // ищем правее
+			left = mid + 1;
 		}
 	}
+	right--; // уменьшаем на 1 правую границу
+	if (arr[right] == find_val) // проверка на искомоый элемент
+		return right + 1; // выводим индекс + 1
+	else
 	return 0; // возвращаем 0 если элемент не найден
 }
 
