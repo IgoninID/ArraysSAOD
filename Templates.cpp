@@ -4,7 +4,7 @@
 /// <summary>
 /// тесты для проверки функции сортировки
 /// </summary>
-void tests_for_sort()
+void tests_for_findsort()
 {
 	//отсортированные массивы
 	int arr1_s[] = { 1, 2, 3, 4, 5 };
@@ -25,11 +25,6 @@ void tests_for_sort()
 	assert(FindSort(arr2_us, 5) == false);
 	assert(FindSort(arr3_us, 5) == false);
 	assert(FindSort(arr4_us, 4) == false);
-	SortMerge(arr1_us, 0, 4);
-	//SortBub(arr1_us, 5);
-	//SortQuick(arr1_us, 0, 4);
-	//SortShell(arr1_us, 5);
-	assert(FindSort(arr1_us, 5) == true);
 
 	//массив с одинаковыми элементами
 	int arr_w_sim_el[] = { 1, 1, 1, 1, 1 };
@@ -42,7 +37,7 @@ void tests_for_sort()
 }
 
 /// <summary>
-/// тесты для проверки поиска
+/// тесты для проверки последовательного поиска
 /// </summary>
 void tests_for_search()
 {
@@ -70,7 +65,7 @@ void tests_for_search()
 }
 
 /// <summary>
-/// тесты для проверки бинарного поиска
+/// тесты для проверки бинарного и итерационного поиска
 /// </summary>
 void tests_for_byn_iter_search()
 {
@@ -101,4 +96,97 @@ void tests_for_byn_iter_search()
 	assert(FindIter(arr_w_1_el, 1, 80000) == 0);
 
 	assert(FindIter(arr_w_1_el, 1, 5000) == 1);
+}
+
+/// <summary>
+/// тесты для проверки сортировки пузырьком
+/// </summary>
+void tests_for_bsort()
+{
+	int arr1[] = { 5, 10, 2, 5, 2, 6, 4, 8, 10, 1000, 40 };
+	assert(FindSort(arr1, 11) == false);
+	int arr2[] = { 5, 5, 5, 5, 5, 1, 1, 1, 1 };
+	assert(FindSort(arr2, 9) == false);
+	int arr3[] = { 100, 20, 10, 9, 8, 6, 4, 2 };
+	assert(FindSort(arr3, 8) == false);
+	int arr4[] = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
+	assert(FindSort(arr4, 12) == false);
+	SortBub(arr1, 11);
+	assert(FindSort(arr1, 11) == true);
+	SortBub(arr2, 9);
+	assert(FindSort(arr2, 9) == true);
+	SortBub(arr3, 8);
+	assert(FindSort(arr3, 8) == true);
+	SortBub(arr4, 12);
+	assert(FindSort(arr4, 12) == true);
+
+}
+
+/// <summary>
+/// тесты для проверки Quicksort
+/// </summary>
+void tests_for_qsort()
+{
+	int arr1[] = { 5, 10, 2, 5, 2, 6, 4, 8, 10, 1000, 40 };
+	assert(FindSort(arr1, 11) == false);
+	int arr2[] = { 5, 5, 5, 5, 5, 1, 1, 1, 1 };
+	assert(FindSort(arr2, 9) == false);
+	int arr3[] = { 100, 20, 10, 9, 8, 6, 4, 2 };
+	assert(FindSort(arr3, 8) == false);
+	int arr4[] = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
+	assert(FindSort(arr4, 12) == false);
+	SortQuick(arr1, 0, 10);
+	assert(FindSort(arr1, 11) == true);
+	SortQuick(arr2, 0, 8);
+	assert(FindSort(arr2, 9) == true);
+	SortQuick(arr3, 0, 7);
+	assert(FindSort(arr3, 8) == true);
+	SortQuick(arr4, 0, 11);
+	assert(FindSort(arr4, 12) == true);
+}
+
+/// <summary>
+/// тесты для проверки сортировки Шелла
+/// </summary>
+void tests_for_ssort()
+{
+	int arr1[] = { 5, 10, 2, 5, 2, 6, 4, 8, 10, 1000, 40 };
+	assert(FindSort(arr1, 11) == false);
+	int arr2[] = { 5, 5, 5, 5, 5, 1, 1, 1, 1 };
+	assert(FindSort(arr2, 9) == false);
+	int arr3[] = { 100, 20, 10, 9, 8, 6, 4, 2 };
+	assert(FindSort(arr3, 8) == false);
+	int arr4[] = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
+	assert(FindSort(arr4, 12) == false);
+	SortShell(arr1, 11);
+	assert(FindSort(arr1, 11) == true);
+	SortShell(arr2, 9);
+	assert(FindSort(arr2, 9) == true);
+	SortShell(arr3, 8);
+	assert(FindSort(arr3, 8) == true);
+	SortShell(arr4, 12);
+	assert(FindSort(arr4, 12) == true);
+}
+
+/// <summary>
+/// тесты для проверки сортировки слиянием
+/// </summary>
+void tests_for_msort()
+{
+	int arr1[] = { 5, 10, 2, 5, 2, 6, 4, 8, 10, 1000, 40 };
+	assert(FindSort(arr1, 11) == false);
+	int arr2[] = { 5, 5, 5, 5, 5, 1, 1, 1, 1 };
+	assert(FindSort(arr2, 9) == false);
+	int arr3[] = { 100, 20, 10, 9, 8, 6, 4, 2 };
+	assert(FindSort(arr3, 8) == false);
+	int arr4[] = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
+	assert(FindSort(arr4, 12) == false);
+	SortMerge(arr1, 0, 10);
+	assert(FindSort(arr1, 11) == true);
+	SortMerge(arr2, 0, 8);
+	assert(FindSort(arr2, 9) == true);
+	SortMerge(arr3, 0, 7);
+	assert(FindSort(arr3, 8) == true);
+	SortMerge(arr4, 0, 11);
+	assert(FindSort(arr4, 12) == true);
 }

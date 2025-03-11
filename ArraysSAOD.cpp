@@ -5,9 +5,13 @@ using namespace std;
 
 int main()
 {
-    tests_for_sort();
+    tests_for_findsort();
     tests_for_search();
     tests_for_byn_iter_search();
+    tests_for_bsort();
+    tests_for_msort();
+    tests_for_qsort();
+    tests_for_ssort();
     //int* arr = CreateArrInc<int>(100000000, 0, 10000);
     //for (int i = 0; i < 100; i++)
     //{

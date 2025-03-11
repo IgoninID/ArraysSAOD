@@ -71,6 +71,8 @@ int TimeFunc(TypeData* arr, size_t n, TypeData val, function<size_t(TypeData*, s
 
 /// <summary>
 /// Бинарный поиск элемента в массиве
+/// BigO time (best - 1; average - log(n); worst - log(n))
+/// BigO space (1)
 /// </summary>
 /// <typeparam name="TypeData - тип элементов массива"></typeparam>
 /// <param name="arr - массив"></param>
@@ -105,7 +107,8 @@ size_t FindElemDub(TypeData* arr, size_t n, TypeData find_val)
 }
 
 /// <summary>
-/// Нахождение элемента в массиве
+/// Нахождение элемента в массиве последовательный поиск
+/// BigO time (worst - n; average - n; best - 1)
 /// </summary>
 /// <typeparam name="TypeData - тип элементов массива"></typeparam>
 /// <param name="arr - массив"></param>
@@ -206,7 +209,7 @@ void TotalTime(TypeData* arr, size_t n, int start, int end)
 	int times = 0; // счетчик времени
 	for (int i = 0; i < 100;i++) 
 	{
-		TypeData find_val = arr[distr(gen)]; // выбираем случайный элемент из массива в качестве искомого
+		TypeData find_val = distr(gen); // выбираем случайный элемент в качестве искомого
 		times += TimeFunc<TypeData>(arr, n, find_val, FindElem<TypeData>); // находим время затраченное на поиск элемента в массиве, суммируем
 	}
 	cout << times/100.0; // находим среднее время
@@ -245,7 +248,7 @@ int SavetoF(TypeData* arr, size_t n, string fname)
 /// <summary>
 /// тесты для проверки функции сортировки
 /// </summary>
-void tests_for_sort();
+void tests_for_findsort();
 
 /// <summary>
 /// тесты для проверки поиска
@@ -257,6 +260,18 @@ void tests_for_search();
 /// </summary>
 void tests_for_byn_iter_search();
 
+/// <summary>
+/// Шаблон итерационного поиска
+/// BigO time (average - log2(log2(n)); worst - n)
+/// BigO space (1)
+/// </summary>
+/// <typeparam name="TypeData - тип элементов массива"></typeparam>
+/// <param name="arr - массив"></param>
+/// <param name="n - размер массива"></param>
+/// <param name="Elem - искомый элемент"></param>
+/// <returns>
+/// место элемента в массиве(индекс + 1), если нет, то вернет 0
+/// </returns>
 template <typename TypeData>
 size_t FindIter(TypeData* arr, size_t n, TypeData Elem)
 {
@@ -264,40 +279,60 @@ size_t FindIter(TypeData* arr, size_t n, TypeData Elem)
 	size_t right = n - 1;
 	while ((left <= right) && (Elem >= arr[left]) && (Elem <= arr[right]))
 	{
+		// Проверяем равны ли границы
 		if (left == right)
 		{
+			// Проверяем найден ли искомый элемент
 			if (arr[left] == Elem)
 			{
 				return left + 1;
 			}
+			// если нет то возвращаем 0
 			return 0;
 		}
+		// Вычисляем индекс элемента исходя из его значения 
 		size_t pos = left + (((double)(right - left) / (arr[right] - arr[left])) * (Elem - arr[left]));
+		// Проверяем если искомый элемент на вычесленном индексе
 		if (arr[pos] == Elem)
 		{
 			return pos + 1;
 		}
+		// Если искомый элемент больше чем элемент на вычисленной позиции, ведем поиск на правой половине массива
 		if (arr[pos] < Elem)
 		{
 			left = pos + 1;
 		}
+		// Если искомый элемент меньше чем элемент на вычисленной позиции, ведем поиск на левой половине массива
 		else
 		{
 			right = pos - 1;
 		}
 	}
+	// Если элемент не найден то возвращаем 0
 	return 0;
 }
 
+/// <summary>
+/// Шаблон сортировки пузырьком
+/// BigO time (best - n; average - n^2; worst - n^2)
+/// BigO space (1)
+/// </summary>
+/// <typeparam name="TypeData - тип элементов массива"></typeparam>
+/// <param name="arr - массив"></param>
+/// <param name="n - размер массива"></param>
 template <typename TypeData>
 void SortBub(TypeData* arr, size_t n)
 {
+	// Внешний цикл с количеством элементов подлежащих сортировке
 	for (size_t i = 0; i < n-1; i++)
 	{
+		// Последние i элементы уже на правильном месте
 		for (size_t j = 0; j < n - i-1;j++)
 		{
+			//Сравниваем соседние элементы
 			if (arr[j] > arr[j + 1])
 			{
+				// меняем местами если порядок неправильный
 				swap(arr[j], arr[j + 1]);
 				//TypeData temp = arr[j];
 				//arr[j] = arr[j + 1];
@@ -307,14 +342,27 @@ void SortBub(TypeData* arr, size_t n)
 	}
 }
 
+/// <summary>
+/// Функция разбиения, которая перестраивает массив таким образом, что 
+/// все меньшие элементы находятся слева от элемента pivot, а все 
+/// более крупные элементы расположены справа от элемента pivot.
+/// </summary>
+/// <typeparam name="TypeData - тип элементов массива"></typeparam>
+/// <param name="arr - массив"></param>
+/// <param name="left - левая граница"></param>
+/// <param name="right - правая граница"></param>
+/// <param name="pivot - осевой элемент"></param>
+/// <returns></returns>
 template <typename TypeData>
 size_t Partit(TypeData* arr, size_t left, size_t right, TypeData pivot)
 {
 	size_t Pindex = left;
 	for (size_t i = left; i <= right;i++)
 	{
+		// если текущий элемент меньше чем осевой элемент
 		if (arr[i] <= pivot)
 		{
+			// Меняем местами элемент [Pindex] с текущим элементом
 			swap(arr[Pindex], arr[i]);
 			Pindex++;
 		}
@@ -323,41 +371,82 @@ size_t Partit(TypeData* arr, size_t left, size_t right, TypeData pivot)
 	return Pindex;
 }
 
+/// <summary>
+/// Шаблон сортировки QuickSort
+/// BigO time (best - n*log(n); average - n*log(n); worst - n^2)
+/// BigO space (log(n))
+/// </summary>
+/// <typeparam name="TypeData - тип элементов массива"></typeparam>
+/// <param name="arr - массив"></param>
+/// <param name="left - левая граница массива"></param>
+/// <param name="right - правая граница массива"></param>
 template <typename TypeData>
 void SortQuick(TypeData* arr, size_t left, size_t right)
 {
+	// Мы разделяем массив на два подмассива вокруг 
+	// точки поворота и рекурсивно вызываем их по отдельности.
 	if (left < right)
 	{
 		TypeData pivot = arr[right];
+		// Изменяем порядок и получяем фактический индекс осевого элемента
 		size_t Pindex = Partit(arr, left, right, pivot);
 		SortQuick(arr, left, Pindex - 1);
 		SortQuick(arr, Pindex + 1, right);
 	}
 }
 
+/// <summary>
+/// Шаблон сортировки пузырьком
+/// BigO time (best - n*log(n); average - (n*log(n))^2; worst - (n*log(n))^2)
+/// BigO space (1)
+/// </summary>
+/// <typeparam name="TypeData - тип элементов массива"></typeparam>
+/// <param name="arr - массив"></param>
+/// <param name="n - размер массива"></param>
 template <typename TypeData>
 void SortShell(TypeData* arr, size_t n)
 {
+	// Начнинаем с большого промежутка, затем уменьшаем его
 	for (size_t gap = n / 2; gap > 0; gap /= 2)
 	{
+		// Выполняем сортировку вставки с промежутками для этого размера промежутка.
+		// Первые элементы с промежутками a[0 ..gap - 1] уже находятся в правильном порядке с промежутками, 
+		// продолжаем добавлять еще один элемент, пока весь массив не будет отсортирован с промежутками.
 		for (size_t i = gap; i < n;i += 1)
 		{
+			// добавьляем a[i] к элементам, которые были отсортированы по промежуткам, 
+			// сохраняем a[i] в temp и сделайте отверстие в позиции i
 			TypeData temp = arr[i];
+			// сдвигаем ранее отсортированные по промежутку элементы вверх до тех пор, 
+			// пока не будет найдено правильное местоположение для a[i]
 			size_t j;
 			for (j = i;j >= gap && arr[j - gap] > temp;j -= gap)
 			{
 				arr[j] = arr[j - gap];
 			}
+			// помешяем temp(исходный a[i]) в нужное место
 			arr[j] = temp;
 		}
 	}
 }
 
+/// <summary>
+/// Шаблон слияния двух подмассивов из массива arr[]
+/// первый подмассив arr[left..mid]
+/// второй подмассив arr[mid+1..right]
+/// </summary>
+/// <typeparam name="TypeData - тип элементов массива"></typeparam>
+/// <param name="arr - массив"></param>
+/// <param name="left - левая граница массива"></param>
+/// <param name="mid - середина массива"></param>
+/// <param name="right - правая граница массива"></param>
 template <typename TypeData>
 void Merge(TypeData* arr, size_t left, size_t mid, size_t right)
 {
 	size_t n1 = mid - left + 1;
 	size_t n2 = right - mid;
+
+	//Создаем подмассивы
 	TypeData* L = new TypeData(n1);
 	TypeData* R = new TypeData(n2);
 	for (size_t i = 0; i < n1;i++)
@@ -368,9 +457,11 @@ void Merge(TypeData* arr, size_t left, size_t mid, size_t right)
 	{
 		R[j] = arr[mid + 1 + j];
 	}
+
 	size_t i = 0;
 	size_t j = 0;
 	size_t k = left;
+	//Делаем слияние подмассивов обратно в arr[left..right]
 	while ((i < n1) && (j < n2))
 	{
 		if (L[i] <= R[j])
@@ -385,12 +476,14 @@ void Merge(TypeData* arr, size_t left, size_t mid, size_t right)
 		}
 		k++;
 	}
+	//Копируем оставшиеся элементы подмассива L, если такие остались
 	while (i < n1)
 	{
 		arr[k] = L[i];
 		i++;
 		k++;
 	}
+	//Копируем оставшиеся элементы подмассива R, если такие остались
 	while (j < n2)
 	{
 		arr[k] = R[j];
@@ -399,6 +492,15 @@ void Merge(TypeData* arr, size_t left, size_t mid, size_t right)
 	}
 }
 
+/// <summary>
+/// Шаблон сортировки слиянием
+/// BigO time (best - n*log(n); average - n*log(n); worst - n*log(n))
+/// BigO space (n)
+/// </summary>
+/// <typeparam name="TypeData - тип элементов массива"></typeparam>
+/// <param name="arr - массив"></param>
+/// <param name="left - левая граница массива"></param>
+/// <param name="right - правая граница массива"></param>
 template <typename TypeData>
 void SortMerge(TypeData* arr, size_t left, size_t right)
 {
@@ -409,3 +511,23 @@ void SortMerge(TypeData* arr, size_t left, size_t right)
 	SortMerge(arr, mid+1, right);
 	Merge(arr, left, mid, right);
 }
+
+/// <summary>
+/// тесты для проверки сортировки пузырьком
+/// </summary>
+void tests_for_bsort();
+
+/// <summary>
+/// тесты для проверки Quicksort
+/// </summary>
+void tests_for_qsort();
+
+/// <summary>
+/// тесты для проверки сортировки Шелла
+/// </summary>
+void tests_for_ssort();
+
+/// <summary>
+/// тесты для проверки сортировки слиянием
+/// </summary>
+void tests_for_msort();
