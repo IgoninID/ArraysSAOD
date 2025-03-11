@@ -7,7 +7,7 @@ int main()
 {
     tests_for_sort();
     tests_for_search();
-    tests_for_bynsearch();
+    tests_for_byn_iter_search();
     int* arr = CreateArrInc<int>(100000000, 0, 10000);
     //for (int i = 0; i < 100; i++)
     //{
