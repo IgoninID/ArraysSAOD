@@ -25,6 +25,11 @@ void tests_for_sort()
 	assert(FindSort(arr2_us, 5) == false);
 	assert(FindSort(arr3_us, 5) == false);
 	assert(FindSort(arr4_us, 4) == false);
+	SortMerge(arr1_us, 0, 4);
+	//SortBub(arr1_us, 5);
+	//SortQuick(arr1_us, 0, 4);
+	//SortShell(arr1_us, 5);
+	assert(FindSort(arr1_us, 5) == true);
 
 	//массив с одинаковыми элементами
 	int arr_w_sim_el[] = { 1, 1, 1, 1, 1 };
@@ -41,7 +46,7 @@ void tests_for_sort()
 /// </summary>
 void tests_for_search()
 {
-	int arr1[] = { 10, 20, 60, 200, 5000, 40 };
+	int arr1[] = { 10, 20, 60, 200, 5000, 40000 };
 
 	int arr2[] = { 100 };
 
@@ -49,7 +54,7 @@ void tests_for_search()
 
 	assert(FindElem(arr1, n1, 200)==4);
 
-	assert(FindElem(arr1, n1, 40) == 6);
+	assert(FindElem(arr1, n1, 40000) == 6);
 
 	assert(FindElem(arr1, n1, 10) == 1);
 
@@ -60,12 +65,14 @@ void tests_for_search()
 	assert(FindElem(arr2, 1, 100) == 1);
 
 	assert(FindElem(arr2, 1, 200) == 0);
+
+	assert(FindIter(arr1, n1, 200) == 4);
 }
 
 /// <summary>
 /// тесты для проверки бинарного поиска
 /// </summary>
-void tests_for_bynsearch()
+void tests_for_byn_iter_search()
 {
 	int arr1_sort[] = { 5, 6, 9, 10, 100, 500, 5000, 80000 };
 	size_t n1 = 8;
@@ -82,4 +89,16 @@ void tests_for_bynsearch()
 	assert(FindElemDub(arr_w_1_el, 1, 80000) == 0);
 
 	assert(FindElemDub(arr_w_1_el, 1, 5000) == 1);
+
+	assert(FindIter(arr1_sort, n1, 5) == 1);
+
+	assert(FindIter(arr1_sort, n1, 80000) == 8);
+
+	assert(FindIter(arr1_sort, n1, 10) == 4);
+
+	assert(FindIter(arr1_sort, n1, 600) == 0);
+
+	assert(FindIter(arr_w_1_el, 1, 80000) == 0);
+
+	assert(FindIter(arr_w_1_el, 1, 5000) == 1);
 }

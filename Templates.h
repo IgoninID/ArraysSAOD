@@ -87,7 +87,7 @@ size_t FindElemDub(TypeData* arr, size_t n, TypeData find_val)
 	size_t mid; // середина 
 	while (left <= right)
 	{
-		mid = (left + right) / 2; // находим середину массива
+		mid = left + (right - left) / 2; // находим середину массива
 		if (arr[mid] == find_val)
 		{
 			return mid+1; // если элемент найден, то возвращаем индекс + 1
@@ -255,6 +255,157 @@ void tests_for_search();
 /// <summary>
 /// тесты для проверки бинарного поиска
 /// </summary>
-void tests_for_bynsearch();
+void tests_for_byn_iter_search();
 
+template <typename TypeData>
+size_t FindIter(TypeData* arr, size_t n, TypeData Elem)
+{
+	size_t left = 0;
+	size_t right = n - 1;
+	while ((left <= right) && (Elem >= arr[left]) && (Elem <= arr[right]))
+	{
+		if (left == right)
+		{
+			if (arr[left] == Elem)
+			{
+				return left + 1;
+			}
+			return 0;
+		}
+		size_t pos = left + (((double)(right - left) / (arr[right] - arr[left])) * (Elem - arr[left]));
+		if (arr[pos] == Elem)
+		{
+			return pos + 1;
+		}
+		if (arr[pos] < Elem)
+		{
+			left = pos + 1;
+		}
+		else
+		{
+			right = pos - 1;
+		}
+	}
+	return 0;
+}
 
+template <typename TypeData>
+void SortBub(TypeData* arr, size_t n)
+{
+	for (size_t i = 0; i < n-1; i++)
+	{
+		for (size_t j = 0; j < n - i-1;j++)
+		{
+			if (arr[j] > arr[j + 1])
+			{
+				swap(arr[j], arr[j + 1]);
+				//TypeData temp = arr[j];
+				//arr[j] = arr[j + 1];
+				//arr[j + 1] = temp;
+			}
+		}
+	}
+}
+
+template <typename TypeData>
+size_t Partit(TypeData* arr, size_t left, size_t right, TypeData pivot)
+{
+	size_t Pindex = left;
+	for (size_t i = left; i <= right;i++)
+	{
+		if (arr[i] <= pivot)
+		{
+			swap(arr[Pindex], arr[i]);
+			Pindex++;
+		}
+	}
+	Pindex--;
+	return Pindex;
+}
+
+template <typename TypeData>
+void SortQuick(TypeData* arr, size_t left, size_t right)
+{
+	if (left < right)
+	{
+		TypeData pivot = arr[right];
+		size_t Pindex = Partit(arr, left, right, pivot);
+		SortQuick(arr, left, Pindex - 1);
+		SortQuick(arr, Pindex + 1, right);
+	}
+}
+
+template <typename TypeData>
+void SortShell(TypeData* arr, size_t n)
+{
+	for (size_t gap = n / 2; gap > 0; gap /= 2)
+	{
+		for (size_t i = gap; i < n;i += 1)
+		{
+			TypeData temp = arr[i];
+			size_t j;
+			for (j = i;j >= gap && arr[j - gap] > temp;j -= gap)
+			{
+				arr[j] = arr[j - gap];
+			}
+			arr[j] = temp;
+		}
+	}
+}
+
+template <typename TypeData>
+void Merge(TypeData* arr, size_t left, size_t mid, size_t right)
+{
+	size_t n1 = mid - left + 1;
+	size_t n2 = right - mid;
+	TypeData* L = new TypeData(n1);
+	TypeData* R = new TypeData(n2);
+	for (size_t i = 0; i < n1;i++)
+	{
+		L[i] = arr[left + i];
+	}
+	for (size_t j = 0; j < n2;j++)
+	{
+		R[j] = arr[mid + 1 + j];
+	}
+	size_t i = 0;
+	size_t j = 0;
+	size_t k = left;
+	while ((i < n1) && (j < n2))
+	{
+		if (L[i] <= R[j])
+		{
+			arr[k] = L[i];
+			i++;
+		}
+		else
+		{
+			arr[k] = R[j];
+			j++;
+		}
+		k++;
+	}
+	while (i < n1)
+	{
+		arr[k] = L[i];
+		i++;
+		k++;
+	}
+	while (j < n2)
+	{
+		arr[k] = R[j];
+		j++;
+		k++;
+	}
+}
+
+template <typename TypeData>
+void SortMerge(TypeData* arr, size_t left, size_t right)
+{
+	if (left >= right)
+		return;
+	size_t mid = left + (right - left) / 2;
+	SortMerge(arr, left, mid);
+	SortMerge(arr, mid+1, right);
+	Merge(arr, left, mid, right);
+}
