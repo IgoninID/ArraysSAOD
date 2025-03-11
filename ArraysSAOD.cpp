@@ -7,9 +7,8 @@ int main()
 {
     tests_for_sort();
     tests_for_search();
-    tests_for_byn_iter_search();
-    //size_t n = 500000000;
-    //int* arr = CreateArrInc<int>(n, 0, 1000000);
+    tests_for_bynsearch();
+    int* arr = CreateArrInc<int>(100000000, 0, 10000);
     //for (int i = 0; i < 100; i++)
     //{
     //    cout << arr[i] << "\n";
