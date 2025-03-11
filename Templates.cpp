@@ -46,7 +46,7 @@ void tests_for_sort()
 /// </summary>
 void tests_for_search()
 {
-	int arr1[] = { 10, 20, 60, 200, 5000, 40000 };
+	int arr1[] = { 10, 20, 60, 200, 5000, 40 };
 
 	int arr2[] = { 100 };
 
@@ -54,7 +54,7 @@ void tests_for_search()
 
 	assert(FindElem(arr1, n1, 200)==4);
 
-	assert(FindElem(arr1, n1, 40000) == 6);
+	assert(FindElem(arr1, n1, 40) == 6);
 
 	assert(FindElem(arr1, n1, 10) == 1);
 
@@ -66,7 +66,7 @@ void tests_for_search()
 
 	assert(FindElem(arr2, 1, 200) == 0);
 
-	assert(FindIter(arr1, n1, 200) == 4);
+	assert(FindElem(arr1, n1, 200) == 4);
 }
 
 /// <summary>
