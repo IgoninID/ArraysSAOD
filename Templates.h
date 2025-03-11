@@ -88,7 +88,7 @@ size_t FindElemDub(TypeData* arr, size_t n, TypeData find_val)
 	while (left < right)
 	{
 		mid = left + (right - left) / 2; // находим середину массива
-		if (arr[mid] == find_val)
+		if (arr[mid] > find_val)
 		{
 			right = mid;
 		}
