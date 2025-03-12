@@ -12,6 +12,7 @@ int main()
     tests_for_msort();
     tests_for_qsort();
     tests_for_ssort();
+    tests_for_isort();
     //int* arr = CreateArrInc<int>(100000000, 0, 10000);
     //for (int i = 0; i < 100; i++)
     //{

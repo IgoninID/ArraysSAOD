@@ -85,17 +85,17 @@ void tests_for_byn_iter_search()
 
 	assert(FindElemDub(arr_w_1_el, 1, 5000) == 1);
 
-	assert(FindIter(arr1_sort, n1, 5) == 1);
+	assert(FindInter(arr1_sort, n1, 5) == 1);
 
-	assert(FindIter(arr1_sort, n1, 80000) == 8);
+	assert(FindInter(arr1_sort, n1, 80000) == 8);
 
-	assert(FindIter(arr1_sort, n1, 10) == 4);
+	assert(FindInter(arr1_sort, n1, 10) == 4);
 
-	assert(FindIter(arr1_sort, n1, 600) == 0);
+	assert(FindInter(arr1_sort, n1, 600) == 0);
 
-	assert(FindIter(arr_w_1_el, 1, 80000) == 0);
+	assert(FindInter(arr_w_1_el, 1, 80000) == 0);
 
-	assert(FindIter(arr_w_1_el, 1, 5000) == 1);
+	assert(FindInter(arr_w_1_el, 1, 5000) == 1);
 }
 
 /// <summary>
@@ -110,6 +110,7 @@ void tests_for_bsort()
 	int arr3[] = { 100, 20, 10, 9, 8, 6, 4, 2 };
 	assert(FindSort(arr3, 8) == false);
 	int arr4[] = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
+	// todo массивы из 2, 1 элементов
 	assert(FindSort(arr4, 12) == false);
 	SortBub(arr1, 11);
 	assert(FindSort(arr1, 11) == true);
@@ -188,5 +189,28 @@ void tests_for_msort()
 	SortMerge(arr3, 0, 7);
 	assert(FindSort(arr3, 8) == true);
 	SortMerge(arr4, 0, 11);
+	assert(FindSort(arr4, 12) == true);
+}
+
+/// <summary>
+/// тесты для проверки сортировки вставками
+/// </summary>
+void tests_for_isort()
+{
+	int arr1[] = { 5, 10, 2, 5, 2, 6, 4, 8, 10, 1000, 40 };
+	assert(FindSort(arr1, 11) == false);
+	int arr2[] = { 5, 5, 5, 5, 5, 1, 1, 1, 1 };
+	assert(FindSort(arr2, 9) == false);
+	int arr3[] = { 100, 20, 10, 9, 8, 6, 4, 2 };
+	assert(FindSort(arr3, 8) == false);
+	int arr4[] = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
+	assert(FindSort(arr4, 12) == false);
+	SortInsert(arr1, 11);
+	assert(FindSort(arr1, 11) == true);
+	SortInsert(arr2, 9);
+	assert(FindSort(arr2, 9) == true);
+	SortInsert(arr3, 8);
+	assert(FindSort(arr3, 8) == true);
+	SortInsert(arr4, 12);
 	assert(FindSort(arr4, 12) == true);
 }

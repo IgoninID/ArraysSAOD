@@ -226,7 +226,7 @@ void TotalTime(TypeData* arr, size_t n, int start, int end)
 /// 1 - файл не открылся, 0 - функция выполнила свою работу
 /// </returns>
 template <typename TypeData>
-int SavetoF(TypeData* arr, size_t n, string fname)
+int SavetoF(TypeData* arr, size_t n, const string& fname)
 {
 	ofstream Savef; // переменная потока для записи
 	Savef.open(fname); // открываем файл для записи
@@ -261,7 +261,7 @@ void tests_for_search();
 void tests_for_byn_iter_search();
 
 /// <summary>
-/// Шаблон итерационного поиска
+/// Шаблон интерполиционного поиска
 /// BigO time (average - log2(log2(n)); worst - n)
 /// BigO space (1)
 /// </summary>
@@ -273,7 +273,7 @@ void tests_for_byn_iter_search();
 /// место элемента в массиве(индекс + 1), если нет, то вернет 0
 /// </returns>
 template <typename TypeData>
-size_t FindIter(TypeData* arr, size_t n, TypeData Elem)
+size_t FindInter(TypeData* arr, size_t n, TypeData Elem)
 {
 	size_t left = 0;
 	size_t right = n - 1;
@@ -313,7 +313,7 @@ size_t FindIter(TypeData* arr, size_t n, TypeData Elem)
 }
 
 /// <summary>
-/// Шаблон сортировки пузырьком
+/// Шаблон сортировки пузырьком по возрастанию
 /// BigO time (best - n; average - n^2; worst - n^2)
 /// BigO space (1)
 /// </summary>
@@ -372,7 +372,7 @@ size_t Partit(TypeData* arr, size_t left, size_t right, TypeData pivot)
 }
 
 /// <summary>
-/// Шаблон сортировки QuickSort
+/// Шаблон сортировки QuickSort по возрастанию
 /// BigO time (best - n*log(n); average - n*log(n); worst - n^2)
 /// BigO space (log(n))
 /// </summary>
@@ -386,7 +386,8 @@ void SortQuick(TypeData* arr, size_t left, size_t right)
 	// Мы разделяем массив на два подмассива вокруг 
 	// точки поворота и рекурсивно вызываем их по отдельности.
 	if (left < right)
-	{
+	{ 
+		// todo случ элемент делать опорным
 		TypeData pivot = arr[right];
 		// Изменяем порядок и получяем фактический индекс осевого элемента
 		size_t Pindex = Partit(arr, left, right, pivot);
@@ -396,7 +397,8 @@ void SortQuick(TypeData* arr, size_t left, size_t right)
 }
 
 /// <summary>
-/// Шаблон сортировки пузырьком
+/// Шаблон сортировки шелла по возрастанию
+/// промежуток начинается на половине длины, затем уменьшается в 2 раза, до 0
 /// BigO time (best - n*log(n); average - (n*log(n))^2; worst - (n*log(n))^2)
 /// BigO space (1)
 /// </summary>
@@ -431,7 +433,7 @@ void SortShell(TypeData* arr, size_t n)
 }
 
 /// <summary>
-/// Шаблон слияния двух подмассивов из массива arr[]
+/// Шаблон слияния двух подмассивов из массива arr[] по возрастанию
 /// первый подмассив arr[left..mid]
 /// второй подмассив arr[mid+1..right]
 /// </summary>
@@ -451,6 +453,7 @@ void Merge(TypeData* arr, size_t left, size_t mid, size_t right)
 	TypeData* R = new TypeData(n2);
 	for (size_t i = 0; i < n1;i++)
 	{
+		// todo заменить на memcpy или copy
 		L[i] = arr[left + i];
 	}
 	for (size_t j = 0; j < n2;j++)
@@ -476,6 +479,7 @@ void Merge(TypeData* arr, size_t left, size_t mid, size_t right)
 		}
 		k++;
 	}
+	// todo заменить на memcpy или copy
 	//Копируем оставшиеся элементы подмассива L, если такие остались
 	while (i < n1)
 	{
@@ -483,6 +487,7 @@ void Merge(TypeData* arr, size_t left, size_t mid, size_t right)
 		i++;
 		k++;
 	}
+	// todo заменить на memcpy или copy
 	//Копируем оставшиеся элементы подмассива R, если такие остались
 	while (j < n2)
 	{
@@ -493,7 +498,7 @@ void Merge(TypeData* arr, size_t left, size_t mid, size_t right)
 }
 
 /// <summary>
-/// Шаблон сортировки слиянием
+/// Шаблон сортировки слиянием по возрастанию
 /// BigO time (best - n*log(n); average - n*log(n); worst - n*log(n))
 /// BigO space (n)
 /// </summary>
@@ -510,6 +515,33 @@ void SortMerge(TypeData* arr, size_t left, size_t right)
 	SortMerge(arr, left, mid);
 	SortMerge(arr, mid+1, right);
 	Merge(arr, left, mid, right);
+}
+
+/// <summary>
+/// Сортировка вставками по возрастанию
+/// BigO time (best - n; average - n^2; worst - n^2)
+/// BigO space (1)
+/// </summary>
+/// <typeparam name="TypeData"></typeparam>
+/// <param name="arr"></param>
+/// <param name="n"></param>
+template <typename TypeData>
+void SortInsert(TypeData* arr, size_t n)
+{
+	for (size_t i = 1; i < n; i++)
+	{
+		TypeData key = arr[i];
+		size_t j = i - 1;
+		// двигаем элементы arr[0..i-1],
+		// которые больше ключевого элемента
+		// на одну позицию выше их текущей позиции
+		while (j >= 0 && arr[j] > key)
+		{
+			arr[j + 1] = arr[j];
+			j = j - 1;
+		}
+		arr[j + 1] = key;
+	}
 }
 
 /// <summary>
@@ -531,3 +563,8 @@ void tests_for_ssort();
 /// тесты для проверки сортировки слиянием
 /// </summary>
 void tests_for_msort();
+
+/// <summary>
+/// тесты для проверки сортировки вставками
+/// </summary>
+void tests_for_isort();
