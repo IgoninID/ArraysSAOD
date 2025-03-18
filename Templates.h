@@ -323,6 +323,10 @@ size_t FindInter(TypeData* arr, size_t n, TypeData Elem)
 template <typename TypeData>
 void SortBub(TypeData* arr, size_t n)
 {
+	if (n == 1)
+	{
+		return;
+	}
 	// Внешний цикл с количеством элементов подлежащих сортировке
 	for (size_t i = 0; i < n-1; i++)
 	{
@@ -391,9 +395,14 @@ void SortQuick(TypeData* arr, size_t left, size_t right)
 		TypeData pivot = arr[right];
 		// Изменяем порядок и получяем фактический индекс осевого элемента
 		size_t Pindex = Partit(arr, left, right, pivot);
+		if (right == left + 1)
+		{
+			return;
+		}
 		SortQuick(arr, left, Pindex - 1);
 		SortQuick(arr, Pindex + 1, right);
 	}
+	return;
 }
 
 /// <summary>
@@ -408,6 +417,10 @@ void SortQuick(TypeData* arr, size_t left, size_t right)
 template <typename TypeData>
 void SortShell(TypeData* arr, size_t n)
 {
+	if (n == 1)
+	{
+		return;
+	}
 	// Начнинаем с большого промежутка, затем уменьшаем его
 	for (size_t gap = n / 2; gap > 0; gap /= 2)
 	{
@@ -528,6 +541,10 @@ void SortMerge(TypeData* arr, size_t left, size_t right)
 template <typename TypeData>
 void SortInsert(TypeData* arr, size_t n)
 {
+	if (n == 1)
+	{
+		return;
+	}
 	for (size_t i = 1; i < n; i++)
 	{
 		TypeData key = arr[i];
