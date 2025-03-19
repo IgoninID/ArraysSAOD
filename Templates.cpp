@@ -138,6 +138,8 @@ void tests_for_qsort()
 	assert(FindSort(arr1, 11) == false);
 	int arr2[] = { 5, 5, 5, 5, 5, 1, 1, 1, 1 };
 	assert(FindSort(arr2, 9) == false);
+	int arr3[] = { 100, 20, 10, 9, 8, 6, 4, 2 };
+	assert(FindSort(arr3, 8) == false);
 	int arr4[] = { 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6 };
 	assert(FindSort(arr4, 12) == false);
 	int arr_w_1[] = { 400 };
@@ -151,6 +153,8 @@ void tests_for_qsort()
 	assert(FindSort(arr1, 11) == true);
 	SortQuick(arr2, 0, 8);
 	assert(FindSort(arr2, 9) == true);
+	SortQuick(arr3, 0, 7);
+	assert(FindSort(arr3, 8) == true);
 	SortQuick(arr4, 0, 11);
 	assert(FindSort(arr4, 12) == true);
 }
@@ -190,8 +194,8 @@ void tests_for_ssort()
 /// </summary>
 void tests_for_msort()
 {
-	int arr1[] = { 5, 10, 2, 5, 2, 6, 4, 8, 10, 1000, 40 };
-	assert(FindSort(arr1, 11) == false);
+	int arr1[] = { 5, 10, 2, 0, 7, 6, 4, 8, 1, 40 };
+	assert(FindSort(arr1, 10) == false);
 	int arr2[] = { 5, 5, 5, 5, 5, 1, 1, 1, 1 };
 	assert(FindSort(arr2, 9) == false);
 	int arr3[] = { 100, 20, 10, 9, 8, 6, 4, 2 };
@@ -205,8 +209,8 @@ void tests_for_msort()
 	assert(FindSort(arr_w_1, 1) == true);
 	SortMerge(arr_w_2, 0, 1);
 	assert(FindSort(arr_w_2, 2) == true);
-	SortMerge(arr1, 0, 10);
-	assert(FindSort(arr1, 11) == true);
+	SortMerge(arr1, 0, 9);
+	assert(FindSort(arr1, 10) == true);
 	SortMerge(arr2, 0, 8);
 	assert(FindSort(arr2, 9) == true);
 	SortMerge(arr3, 0, 7);

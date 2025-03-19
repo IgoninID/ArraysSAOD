@@ -358,20 +358,22 @@ void SortBub(TypeData* arr, size_t n)
 /// <param name="pivot - осевой элемент"></param>
 /// <returns></returns>
 template <typename TypeData>
-size_t Partit(TypeData* arr, size_t left, size_t right, TypeData pivot)
+size_t Partit(TypeData* arr, size_t left, size_t right)
 {
+	// todo случ pivot
+	TypeData pivot = arr[right];
 	size_t Pindex = left;
-	for (size_t i = left; i <= right;i++)
+	for (size_t i = left; i < right;i++)
 	{
 		// если текущий элемент меньше чем осевой элемент
-		if (arr[i] <= pivot)
+		if (arr[i] < pivot)
 		{
 			// Меняем местами элемент [Pindex] с текущим элементом
 			swap(arr[Pindex], arr[i]);
 			Pindex++;
 		}
 	}
-	Pindex--;
+	swap(arr[Pindex], arr[right]);
 	return Pindex;
 }
 
@@ -391,14 +393,13 @@ void SortQuick(TypeData* arr, size_t left, size_t right)
 	// точки поворота и рекурсивно вызываем их по отдельности.
 	if (left < right)
 	{ 
-		// todo случ элемент делать опорным
-		TypeData pivot = arr[right];
 		// Изменяем порядок и получяем фактический индекс осевого элемента
-		size_t Pindex = Partit(arr, left, right, pivot);
+		size_t Pindex = Partit(arr, left, right);
 		if (right == left + 1)
 		{
 			return;
 		}
+		if (Pindex > 0)
 		SortQuick(arr, left, Pindex - 1);
 		SortQuick(arr, Pindex + 1, right);
 	}
@@ -464,15 +465,8 @@ void Merge(TypeData* arr, size_t left, size_t mid, size_t right)
 	//Создаем подмассивы
 	TypeData* L = new TypeData(n1);
 	TypeData* R = new TypeData(n2);
-	for (size_t i = 0; i < n1;i++)
-	{
-		// todo заменить на memcpy или copy
-		L[i] = arr[left + i];
-	}
-	for (size_t j = 0; j < n2;j++)
-	{
-		R[j] = arr[mid + 1 + j];
-	}
+	copy(arr + left, arr + left + n1, L);
+	copy(arr + mid + 1, arr + mid + 1 + n2, R);
 
 	size_t i = 0;
 	size_t j = 0;
@@ -492,22 +486,16 @@ void Merge(TypeData* arr, size_t left, size_t mid, size_t right)
 		}
 		k++;
 	}
-	// todo заменить на memcpy или copy
+
 	//Копируем оставшиеся элементы подмассива L, если такие остались
-	while (i < n1)
-	{
-		arr[k] = L[i];
-		i++;
-		k++;
-	}
-	// todo заменить на memcpy или copy
+	copy(L + i, L + n1, arr + k);
+	// обновляем k после копирования подмассива L
+	k += (n1 - i);
 	//Копируем оставшиеся элементы подмассива R, если такие остались
-	while (j < n2)
-	{
-		arr[k] = R[j];
-		j++;
-		k++;
-	}
+	copy(R + j, R + n2, arr + k);
+
+	//delete[] L;
+	//delete[] R;
 }
 
 /// <summary>

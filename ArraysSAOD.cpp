@@ -28,5 +28,5 @@ int main()
     //string s = "arr1.txt";
     //SavetoF<int>(arr, 100000000, s);
     //elete[] arr;
-
+    return 0;
 }
