@@ -50,19 +50,16 @@ TypeData* CreateArr(size_t n, TypeData start, TypeData end)
 /// <summary>
 /// Вычисление времени затраченного на выполнение функции
 /// </summary>
-/// <typeparam name="TypeData - тип элементов массива"></typeparam>
-/// <param name="arr - массив"></param>
-/// <param name="n - размер массива"></param>
-/// <param name="val - искомый элемент"></param>
-/// <param name="testFunc - тестируемая функция"></param>
+/// <typeparam name="Func - функция"></typeparam>
+/// <param name="func - тестируемая функция"></param>
 /// <returns>
 /// количество милисекунд затраченное на выполнение функции
 /// </returns>
-template <typename TypeData>
-int TimeFunc(TypeData* arr, size_t n, TypeData val, function<size_t(TypeData*, size_t, TypeData)> testFunc)
+template <typename Func>
+double TimeFunc(Func func)
 {
 	auto t1 = steady_clock::now(); // начальное время
-	size_t i = testFunc(arr, n, val); // тестируемая функция
+	func(); // тестируемая функция
 	auto t2 = steady_clock::now(); // конечное время
 	auto delta = duration_cast<milliseconds>(t2 - t1); // вычисление затраченного на функцию времени в милисекундах
 	cout << delta.count() << "\n"; // вывод в консоль количества милисекунд
@@ -153,7 +150,7 @@ TypeData* CreateArrInc(size_t n, TypeData start, TypeData end)
 		arr[0] = distr(gen); // случайный начальный элемент
 		for (size_t i = 1; i < n; i++)
 		{
-				arr[i] = arr[i - 1] + (distr(gen) / 100); // следующий элемент = предыдущий + случайное число/100
+				arr[i] = arr[i - 1] + (distr(gen) / 100000000); // следующий элемент = предыдущий + случайное число/100
 		}
 		return arr; // возвращаем массив
 	}
@@ -164,7 +161,7 @@ TypeData* CreateArrInc(size_t n, TypeData start, TypeData end)
 		arr[0] = distr(gen); // случайный начальный элемент
 		for (size_t i = 1; i < n; i++)
 		{
-				arr[i] = arr[i - 1] + (distr(gen) / 100); // следующий элемент = предыдущий + случайное число/100
+				arr[i] = arr[i - 1] + (distr(gen) / 100000000); // следующий элемент = предыдущий + случайное число/100
 		}
 		return arr; // возвращаем массив
 	}
@@ -206,11 +203,11 @@ void TotalTime(TypeData* arr, size_t n, int start, int end)
 	random_device rd; // инициализация случайных чисел
 	mt19937 gen(rd()); // генератор случайных чисел
 	uniform_int_distribution<> distr(start, end); // равномерное целочисленное распределение случайных чисел
-	int times = 0; // счетчик времени
+	double times = 0; // счетчик времени
 	for (int i = 0; i < 100;i++) 
 	{
 		TypeData find_val = distr(gen); // выбираем случайный элемент в качестве искомого
-		times += TimeFunc<TypeData>(arr, n, find_val, FindElem<TypeData>); // находим время затраченное на поиск элемента в массиве, суммируем
+		times += TimeFunc([&]() {size_t i = FindElemDub(arr, n, find_val);}); // находим время затраченное на поиск элемента в массиве, суммируем
 	}
 	cout << times/100.0; // находим среднее время
 }
@@ -338,9 +335,6 @@ void SortBub(TypeData* arr, size_t n)
 			{
 				// меняем местами если порядок неправильный
 				swap(arr[j], arr[j + 1]);
-				//TypeData temp = arr[j];
-				//arr[j] = arr[j + 1];
-				//arr[j + 1] = temp;
 			}
 		}
 	}
@@ -360,7 +354,14 @@ void SortBub(TypeData* arr, size_t n)
 template <typename TypeData>
 size_t Partit(TypeData* arr, size_t left, size_t right)
 {
-	// todo случ pivot
+	size_t mid = left + (right - left) / 2;
+	if (arr[left] > arr[mid])
+		swap(arr[left], arr[mid]);
+	if (arr[left] > arr[right])
+		swap(arr[left], arr[right]);
+	if (arr[mid] > arr[right])
+		swap(arr[mid], arr[right]);
+	swap(arr[mid], arr[right]); // arr[mid] является медианой
 	TypeData pivot = arr[right];
 	size_t Pindex = left;
 	for (size_t i = left; i < right;i++)
