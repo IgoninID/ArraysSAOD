@@ -48,6 +48,40 @@ TypeData* CreateArr(size_t n, TypeData start, TypeData end)
 }
 
 /// <summary>
+/// Рекурсивный бинарный поиск
+/// </summary>
+/// <typeparam name="TypeData - тип данных массива"></typeparam>
+/// <param name="arr - массив"></param>
+/// <param name="left - левая граница"></param>
+/// <param name="right - правая граница"></param>
+/// <param name="elem - искомый элемент"></param>
+/// <returns>
+/// Индекс элемента
+/// </returns>
+template <typename TypeData>
+size_t Bin_search_rec(TypeData* arr, size_t left, size_t right, TypeData elem)
+{
+	if (left > right)
+	{
+		return -1;
+	}
+	size_t mid = left + (right - left) / 2;
+	if (arr[mid] == elem)
+	{
+		return mid;
+	}
+	else if (arr[mid] < elem)
+	{
+		return Bin_search_rec<TypeData>(arr, mid + 1, right, elem);
+	}
+	else
+	{
+		if (mid != 0)
+		return Bin_search_rec<TypeData>(arr, left, mid - 1, elem);
+	}
+}
+
+/// <summary>
 /// Вычисление времени затраченного на выполнение функции
 /// </summary>
 /// <typeparam name="Func - функция"></typeparam>
@@ -62,7 +96,7 @@ double TimeFunc(Func func)
 	func(); // тестируемая функция
 	auto t2 = steady_clock::now(); // конечное время
 	auto delta = duration_cast<milliseconds>(t2 - t1); // вычисление затраченного на функцию времени в милисекундах
-	cout << delta.count() << "\n"; // вывод в консоль количества милисекунд
+	//cout << delta.count() << "\n"; // вывод в консоль количества милисекунд
 	return delta.count(); // возвращаем количество милисекунд
 }
 
@@ -96,7 +130,10 @@ size_t FindElemDub(TypeData* arr, size_t n, TypeData find_val)
 			left = mid + 1;
 		}
 	}
-	right--; // уменьшаем на 1 правую границу
+	if (right != 0)
+	{
+		right--; // уменьшаем на 1 правую границу
+	}
 	if (arr[right] == find_val) // проверка на искомоый элемент
 		return right + 1; // выводим индекс + 1
 	else
@@ -150,7 +187,7 @@ TypeData* CreateArrInc(size_t n, TypeData start, TypeData end)
 		arr[0] = distr(gen); // случайный начальный элемент
 		for (size_t i = 1; i < n; i++)
 		{
-				arr[i] = arr[i - 1] + (distr(gen) / 100000000); // следующий элемент = предыдущий + случайное число/100
+				arr[i] = arr[i - 1] + (distr(gen) / 1000); // следующий элемент = предыдущий + случайное число/100
 		}
 		return arr; // возвращаем массив
 	}
@@ -350,7 +387,9 @@ void SortBub(TypeData* arr, size_t n)
 /// <param name="left - левая граница"></param>
 /// <param name="right - правая граница"></param>
 /// <param name="pivot - осевой элемент"></param>
-/// <returns></returns>
+/// <returns>
+/// индекс осевого элемента
+/// </returns>
 template <typename TypeData>
 size_t Partit(TypeData* arr, size_t left, size_t right)
 {
@@ -464,8 +503,8 @@ void Merge(TypeData* arr, size_t left, size_t mid, size_t right)
 	size_t n2 = right - mid;
 
 	//Создаем подмассивы
-	TypeData* L = new TypeData(n1);
-	TypeData* R = new TypeData(n2);
+	TypeData* L = new TypeData[n1];
+	TypeData* R = new TypeData[n2];
 	copy(arr + left, arr + left + n1, L);
 	copy(arr + mid + 1, arr + mid + 1 + n2, R);
 
@@ -495,8 +534,8 @@ void Merge(TypeData* arr, size_t left, size_t mid, size_t right)
 	//Копируем оставшиеся элементы подмассива R, если такие остались
 	copy(R + j, R + n2, arr + k);
 
-	//delete[] L;
-	//delete[] R;
+	delete[] L;
+	delete[] R;
 }
 
 /// <summary>
